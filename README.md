@@ -1,3 +1,38 @@
+# Oracle Dataguard 도커로 동작시키기
+Oracle은 나쁜 회사라 ubuntu를 정식 지원하지 않는다.
+하지만 docker를 이용하면 정상적으로 docker를 구동할 수 있다.
+
+이 repository는 docker 작동을 편하게 도와주는 docker-compse를 이용한다.
+
+## Setup
+두 개의 database가 각각 4G씩 필요하기 때문에 8G는 최소한으로 필요하다.
+
+### Prerequesite
+이 repository에는 oracle database 설치파일이 따로 있지 않다.
+무려 2.9G이기 때문에 github에 올릴 수 없다.
+다른 버전도 몇 개 되는데 이왕 돌려볼꺼 사용할 수 있는 가장 최신 버전을 사용하자.
+Oracle OTN에서 19.3.0 Linux X64를 받아놓도록 하자.
+```
+LINUX.X64_193000_db_home.zip
+```
+
+### Set the Environemt
+작동하기 전에 환경변수들을 설정한다.
+ORADATA_VOLUME은 데이터베이스들의 데이터가 저장될 위치이고,
+DG_DIR 은 이 repository의 위치이다.
+자신의 환경에 맞게 정확하게 설정해 주자.
+
+```
+export COMPOSE_YAML=docker-compose.yml
+export DB_VERSION=19.3.0
+export IMAGE_NAME=oracle/database:${DB_VERSION}-ee
+export ORADATA_VOLUME=~/oradata
+export DG_DIR=~/docker-dataguard
+```
+
+아래는 원본 README (https://github.com/oraclesean/DataGuard-docker)
+----------------------------------
+
 # docker-dataguard
 
 Files for building an Oracle Data Guard database in Docker
