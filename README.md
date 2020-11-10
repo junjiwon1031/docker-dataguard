@@ -4,6 +4,17 @@ Oracle은 나쁜 회사라 ubuntu를 정식 지원하지 않는다.
 
 이 repository는 docker 작동을 편하게 도와주는 docker-compse를 이용한다.
 
+## Information
+19.3 버전 database의 image 크기는 6.65G 니까 충분한 공간을 확보해 둔다.
+```
+> docker images 
+REPOSITORY                         TAG                 IMAGE ID            CREATED             SIZE
+oracle/database                    19.3.0-ee           ea261e0fff26        2 hours ago         6.65GB
+```
+oracle database는 1521과 5500 포트를 열게 되는데, container와 바깥을 연결 할때는 기본적으로 primary 는 1521 -> 1211, standby는 1521 -> 1212 port로 바꾸어 열린다. 해당 포트는 docker-compose.yml에 있으니 이를 변경하면 된다.
+
+그리고 또 기본적으로 container의 data volume 을 local directory에 직접 연결하는 설정도 되어있으니, 이를 docker-compose.yml에 있으니 원하는데로 변경하면 된다.
+
 ## Setup
 두 개의 database가 각각 4G씩 필요하기 때문에 8G는 최소한으로 필요하다.
 
@@ -28,6 +39,47 @@ export DB_VERSION=19.3.0
 export IMAGE_NAME=oracle/database:${DB_VERSION}-ee
 export ORADATA_VOLUME=~/oradata
 export DG_DIR=~/docker-dataguard
+```
+
+### 다운로드 받은 oracle database installation file을 아래와 같이 복사하기
+```
+cp LINUX.X64_193000_db_home.zip $DG_DIR/$DB_VERSION
+```
+
+### oracle/database:19.3.0-ee dokcer image를 만들기 위해서 아래와 같이 build 한다.
+```
+cd $DG_DIR
+./buildDockerImage.sh -v 19.3.0 -e
+```
+
+## 실행시키기.
+아래 커맨드로 docker 를 실행시킬 수 있다.
+-d 는 detach docker실행을 background에서 진행하게 해준다.
+`docker-compose up -d`
+
+현재 구동되고 있는 container들의 로그를 보기위해선 아래의 커맨드를 실행시키면 된다.
+`docker-compose logs -f`
+
+### Create a docker-compose file using a custom configuration and build the tnsnames.ora, listener.ora files
+The `createCompose.sh` script will create the yaml file and the necessary TNS entries by reading the config file:
+```
+./createCompose.sh
+```
+
+# Cleanup
+## To stop compose, remove any existing image and prune the images:
+```
+docker-compose down
+docker rmi oracle/database:19.3.0-ee
+docker image prune <<< y
+```
+
+## Clear out the ORADATA volume
+```
+if [[ "$ORADATA_VOLUME" ]] && [ -d "$ORADATA_VOLUME" ]
+  then rm -Rf $ORADATA_VOLUME/DG*
+fi
+#rm -Rf ~/oradata/DG*
 ```
 
 아래는 원본 README (https://github.com/oraclesean/DataGuard-docker)
