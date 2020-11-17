@@ -1,7 +1,7 @@
 version: '3'
 services: 
   DG11:
-    image: oracle/database:19.3.0-ee
+    image: ${IMAGE_NAME}
     container_name: DG11
     volumes:
       - "${ORADATA_VOLUME}/DG11:/opt/oracle/oradata"
@@ -19,7 +19,7 @@ services:
       - "1211:1521"
 
   DG21:
-    image: oracle/database:19.3.0-ee
+    image: ${IMAGE_NAME}
     container_name: DG21
     volumes:
       - "${ORADATA_VOLUME}/DG21:/opt/oracle/oradata"

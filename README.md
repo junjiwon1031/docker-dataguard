@@ -1,8 +1,9 @@
-# Oracle Dataguard 도커로 동작시키기
+# Oracle Dataguard docker로 동작시키기
 Oracle은 나쁜 회사라 ubuntu를 정식 지원하지 않는다.
 하지만 docker를 이용하면 정상적으로 docker를 구동할 수 있다.
 
 이 repository는 docker 작동을 편하게 도와주는 docker-compse를 이용한다.
+docker와 docker-compose를 따로 설치해야한다.
 
 ## Setup
 두 개의 database가 각각 4G씩 필요하기 때문에 8G는 최소한으로 필요하다.
@@ -17,14 +18,14 @@ LINUX.X64_193000_db_home.zip
 ```
 
 ### Set the Environemt
-작동하기 전에 환경변수들을 설정한다.
+작동하기 전에 변수들을 설정한다.
 ORADATA_VOLUME은 데이터베이스들의 데이터가 저장될 위치이고,
 DG_DIR 은 이 repository의 위치이다.
-export 로 환경변수를 선언해도 되고, .env를 변경해도 된다. (환경변수 우선)
+원본에서는 환경변수를 직접 선언했는데, 너무 귀찮아서 .env를 읽는 것으로 변경하였다.
 자신의 환경에 맞게 정확하게 설정해 주자.
 
 ```
-.env
+# vi .env
 
 COMPOSE_YAML=docker-compose.yml
 DB_VERSION=19.3.0
@@ -32,6 +33,83 @@ IMAGE_NAME=oracle/database:${DB_VERSION}-ee
 DG_DIR=~/Documents/docker-dataguard
 ORADATA_VOLUME=${DG_DIR}/oradata
 ```
+
+### createCompose.sh 및 createDirectory.sh 실행
+위 변수를 설정하였으면 두 script를 각각 실행한다.
+첫번째 것은 docker-compose가 보게될 config 파일이다.
+해당 script를 실행하면, docker-compose config에서 다음과 같은 결과를 얻을 수 있다.
+
+```
+services:
+  DG11:
+    container_name: DG11
+    environment:
+      CONTAINER_NAME: DG11
+      DB_UNQNAME: DG11
+      DG_CONFIG: DG1
+      DG_TARGET: DG21
+      ORACLE_PDB: DG11PDB1
+      ORACLE_PWD: oracle
+      ORACLE_SID: DG11
+      ROLE: PRIMARY
+    image: :-oracle/database:19.3.0-ee
+    ports:
+    - published: 1211
+      target: 1521
+    volumes:
+    - /home/jiwon_jun/Documents/docker-dataguard/oradata/DG11:/opt/oracle/oradata:rw
+    - /home/jiwon_jun/Documents/docker-dataguard:/opt/oracle/scripts:rw
+  DG21:
+    container_name: DG21
+    environment:
+      CONTAINER_NAME: DG21
+      DB_UNQNAME: DG21
+      DG_CONFIG: DG1
+      DG_TARGET: DG11
+      ORACLE_PDB: DG11PDB1
+      ORACLE_PWD: oracle
+      ORACLE_SID: DG11
+      ROLE: STANDBY
+    image: :-oracle/database:19.3.0-ee
+    ports:
+    - published: 1212
+      target: 1521
+    volumes:
+    - /home/jiwon_jun/Documents/docker-dataguard/oradata/DG21:/opt/oracle/oradata:rw
+    - /home/jiwon_jun/Documents/docker-dataguard:/opt/oracle/scripts:rw
+version: '3'
+```
+그리고 volume 같은 경우 docker에서 자동으로 생성해주지만 owner가 root로 되어있고
+container 내부에서 user가 사용하기 위해선 권한 변경을 해줘야하기 때문에 귀찮다...
+이 과정을 묶어서 createDirectory.sh로 만들어두었으니 실행시키면 된다.
+이 과정은 sudo 권한이 필요하다.
+```
+$createDirectory.sh
+[sudo] password for username:        
+Creating ORADATA_VOLUME...                                             
+Creating direcotries for conatiners ...                
+Change owner to 'oracle' in the container.                                
+Change owner to 'oracle' in the container.                                
+createDirectory.sh Done
+```
+
+### 다운로드 받은 oracle database 파일을 version 폴더 안에 복사해둔다.:
+```
+cp LINUX.X64_193000_db_home.zip $DG_DIR/$DB_VERSION
+```
+
+## DG_DIR로 이동하기
+`cd $DG_DIR`
+
+## oracle/database:19.3.0-ee docker image 빌드 및 생성.
+`./buildDockerImage.sh -v 19.3.0 -e`
+
+## Run compose (detached)
+`docker-compose up -d`
+
+## Tail the logs
+`docker-compose logs -f`
+
 
 아래는 원본 README (https://github.com/oraclesean/DataGuard-docker)
 ----------------------------------
