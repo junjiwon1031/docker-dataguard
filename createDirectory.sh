@@ -32,7 +32,7 @@ do
 # Change owner to 'oracle' in the container.
 echo "Change owner of $CONTAINER_NAME to 'oracle' in the container."
 sudo chown 54321:54321 $CONTAINER_NAME
-
+sudo chmod 777 $CONTAINER_NAME
 done
 
 echo "createDirectory.sh Done"
