@@ -1,28 +1,28 @@
-# Oracle Dataguard docker·Î µ¿ÀÛ½ÃÅ°±â
-OracleÀº ³ª»Û È¸»ç¶ó ubuntu¸¦ Á¤½Ä Áö¿øÇÏÁö ¾Ê´Â´Ù.
-ÇÏÁö¸¸ docker¸¦ ÀÌ¿ëÇÏ¸é Á¤»óÀûÀ¸·Î docker¸¦ ±¸µ¿ÇÒ ¼ö ÀÖ´Ù.
+# Oracle Dataguard dockerë¡œ ë™ì‘ì‹œí‚¤ê¸°
+Oracleì€ ë‚˜ìœ íšŒì‚¬ë¼ ubuntuë¥¼ ì •ì‹ ì§€ì›í•˜ì§€ ì•ŠëŠ”ë‹¤.
+í•˜ì§€ë§Œ dockerë¥¼ ì´ìš©í•˜ë©´ ì •ìƒì ìœ¼ë¡œ dockerë¥¼ êµ¬ë™í•  ìˆ˜ ìˆë‹¤.
 
-ÀÌ repository´Â docker ÀÛµ¿À» ÆíÇÏ°Ô µµ¿ÍÁÖ´Â docker-compse¸¦ ÀÌ¿ëÇÑ´Ù.
-docker¿Í docker-compose¸¦ µû·Î ¼³Ä¡ÇØ¾ßÇÑ´Ù.
+ì´ repositoryëŠ” docker ì‘ë™ì„ í¸í•˜ê²Œ ë„ì™€ì£¼ëŠ” docker-compseë¥¼ ì´ìš©í•œë‹¤.
+dockerì™€ docker-composeë¥¼ ë”°ë¡œ ì„¤ì¹˜í•´ì•¼í•œë‹¤.
 
 ## Setup
-µÎ °³ÀÇ database°¡ °¢°¢ 4G¾¿ ÇÊ¿äÇÏ±â ¶§¹®¿¡ 8G´Â ÃÖ¼ÒÇÑÀ¸·Î ÇÊ¿äÇÏ´Ù.
+ë‘ ê°œì˜ databaseê°€ ê°ê° memoryë¥¼ 4Gì”© í•„ìš”í•˜ê¸° ë•Œë¬¸ì— 8GëŠ” ìµœì†Œí•œìœ¼ë¡œ í•„ìš”í•˜ë‹¤.
 
 ### Prerequesite
-ÀÌ repository¿¡´Â oracle database ¼³Ä¡ÆÄÀÏÀÌ µû·Î ÀÖÁö ¾Ê´Ù.
-¹«·Á 2.9GÀÌ±â ¶§¹®¿¡ github¿¡ ¿Ã¸± ¼ö ¾ø´Ù.
-´Ù¸¥ ¹öÀüµµ ¸î °³ µÇ´Âµ¥ ÀÌ¿Õ µ¹·Áº¼²¨ »ç¿ëÇÒ ¼ö ÀÖ´Â °¡Àå ÃÖ½Å ¹öÀüÀ» »ç¿ëÇÏÀÚ.
-Oracle OTN¿¡¼­ 19.3.0 Linux X64¸¦ ¹Ş¾Æ³õµµ·Ï ÇÏÀÚ.
+ì´ repositoryì—ëŠ” oracle database ì„¤ì¹˜íŒŒì¼ì´ ë”°ë¡œ ìˆì§€ ì•Šë‹¤.
+ë¬´ë ¤ 2.9Gì´ê¸° ë•Œë¬¸ì— githubì— ì˜¬ë¦´ ìˆ˜ ì—†ë‹¤.
+ë‹¤ë¥¸ ë²„ì „ë„ ëª‡ ê°œ ë˜ëŠ”ë° ì´ì™• ëŒë ¤ë³¼êº¼ ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” ê°€ì¥ ìµœì‹  ë²„ì „ì„ ì‚¬ìš©í•˜ì.
+Oracle OTNì—ì„œ 19.3.0 Linux X64ë¥¼ ë°›ì•„ë†“ë„ë¡ í•˜ì.
 ```
 LINUX.X64_193000_db_home.zip
 ```
 
 ### Set the Environemt
-ÀÛµ¿ÇÏ±â Àü¿¡ º¯¼öµéÀ» ¼³Á¤ÇÑ´Ù.
-ORADATA_VOLUMEÀº µ¥ÀÌÅÍº£ÀÌ½ºµéÀÇ µ¥ÀÌÅÍ°¡ ÀúÀåµÉ À§Ä¡ÀÌ°í,
-DG_DIR Àº ÀÌ repositoryÀÇ À§Ä¡ÀÌ´Ù.
-¿øº»¿¡¼­´Â È¯°æº¯¼ö¸¦ Á÷Á¢ ¼±¾ğÇß´Âµ¥, ³Ê¹« ±ÍÂú¾Æ¼­ .env¸¦ ÀĞ´Â °ÍÀ¸·Î º¯°æÇÏ¿´´Ù.
-ÀÚ½ÅÀÇ È¯°æ¿¡ ¸Â°Ô Á¤È®ÇÏ°Ô ¼³Á¤ÇØ ÁÖÀÚ.
+ì‘ë™í•˜ê¸° ì „ì— ë³€ìˆ˜ë“¤ì„ ì„¤ì •í•œë‹¤.
+ORADATA_VOLUMEì€ ë°ì´í„°ë² ì´ìŠ¤ë“¤ì˜ ë°ì´í„°ê°€ ì €ì¥ë  ìœ„ì¹˜ì´ê³ ,
+DG_DIR ì€ ì´ repositoryì˜ ìœ„ì¹˜ì´ë‹¤.
+ì›ë³¸ì—ì„œëŠ” í™˜ê²½ë³€ìˆ˜ë¥¼ ì§ì ‘ ì„ ì–¸í–ˆëŠ”ë°, ë„ˆë¬´ ê·€ì°®ì•„ì„œ .envë¥¼ ì½ëŠ” ê²ƒìœ¼ë¡œ ë³€ê²½í•˜ì˜€ë‹¤.
+ìì‹ ì˜ í™˜ê²½ì— ë§ê²Œ ì •í™•í•˜ê²Œ ì„¤ì •í•´ ì£¼ì.
 
 ```
 # vi .env
@@ -34,10 +34,10 @@ DG_DIR=~/Documents/docker-dataguard
 ORADATA_VOLUME=${DG_DIR}/oradata
 ```
 
-### createCompose.sh ¹× createDirectory.sh ½ÇÇà
-À§ º¯¼ö¸¦ ¼³Á¤ÇÏ¿´À¸¸é µÎ script¸¦ °¢°¢ ½ÇÇàÇÑ´Ù.
-Ã¹¹øÂ° °ÍÀº docker-compose°¡ º¸°ÔµÉ config ÆÄÀÏÀÌ´Ù.
-ÇØ´ç script¸¦ ½ÇÇàÇÏ¸é, docker-compose config¿¡¼­ ´ÙÀ½°ú °°Àº °á°ú¸¦ ¾òÀ» ¼ö ÀÖ´Ù.
+### createCompose.sh ë° createDirectory.sh ì‹¤í–‰
+ìœ„ ë³€ìˆ˜ë¥¼ ì„¤ì •í•˜ì˜€ìœ¼ë©´ ë‘ scriptë¥¼ ê°ê° ì‹¤í–‰í•œë‹¤.
+ì²«ë²ˆì§¸ ê²ƒì€ docker-composeê°€ ë³´ê²Œë  config íŒŒì¼ì´ë‹¤.
+í•´ë‹¹ scriptë¥¼ ì‹¤í–‰í•˜ë©´, docker-compose configì—ì„œ ë‹¤ìŒê³¼ ê°™ì€ ê²°ê³¼ë¥¼ ì–»ì„ ìˆ˜ ìˆë‹¤.
 
 ```
 services:
@@ -79,10 +79,10 @@ services:
     - /home/jiwon_jun/Documents/docker-dataguard:/opt/oracle/scripts:rw
 version: '3'
 ```
-±×¸®°í volume °°Àº °æ¿ì docker¿¡¼­ ÀÚµ¿À¸·Î »ı¼ºÇØÁÖÁö¸¸ owner°¡ root·Î µÇ¾îÀÖ°í
-container ³»ºÎ¿¡¼­ user°¡ »ç¿ëÇÏ±â À§ÇØ¼± ±ÇÇÑ º¯°æÀ» ÇØÁà¾ßÇÏ±â ¶§¹®¿¡ ±ÍÂú´Ù...
-ÀÌ °úÁ¤À» ¹­¾î¼­ createDirectory.sh·Î ¸¸µé¾îµÎ¾úÀ¸´Ï ½ÇÇà½ÃÅ°¸é µÈ´Ù.
-ÀÌ °úÁ¤Àº sudo ±ÇÇÑÀÌ ÇÊ¿äÇÏ´Ù.
+ê·¸ë¦¬ê³  volume ê°™ì€ ê²½ìš° dockerì—ì„œ ìë™ìœ¼ë¡œ ìƒì„±í•´ì£¼ì§€ë§Œ ownerê°€ rootë¡œ ë˜ì–´ìˆê³ 
+container ë‚´ë¶€ì—ì„œ userê°€ ì‚¬ìš©í•˜ê¸° ìœ„í•´ì„  ê¶Œí•œ ë³€ê²½ì„ í•´ì¤˜ì•¼í•˜ê¸° ë•Œë¬¸ì— ê·€ì°®ë‹¤...
+ì´ ê³¼ì •ì„ ë¬¶ì–´ì„œ createDirectory.shë¡œ ë§Œë“¤ì–´ë‘ì—ˆìœ¼ë‹ˆ ì‹¤í–‰ì‹œí‚¤ë©´ ëœë‹¤.
+ì´ ê³¼ì •ì€ sudo ê¶Œí•œì´ í•„ìš”í•˜ë‹¤.
 ```
 $createDirectory.sh
 [sudo] password for username:        
@@ -93,15 +93,15 @@ Change owner to 'oracle' in the container.
 createDirectory.sh Done
 ```
 
-### ´Ù¿î·Îµå ¹ŞÀº oracle database ÆÄÀÏÀ» version Æú´õ ¾È¿¡ º¹»çÇØµĞ´Ù.:
+### ë‹¤ìš´ë¡œë“œ ë°›ì€ oracle database íŒŒì¼ì„ version í´ë” ì•ˆì— ë³µì‚¬í•´ë‘”ë‹¤.:
 ```
 cp LINUX.X64_193000_db_home.zip $DG_DIR/$DB_VERSION
 ```
 
-## DG_DIR·Î ÀÌµ¿ÇÏ±â
+## DG_DIRë¡œ ì´ë™í•˜ê¸°
 `cd $DG_DIR`
 
-## oracle/database:19.3.0-ee docker image ºôµå ¹× »ı¼º.
+## oracle/database:19.3.0-ee docker image ë¹Œë“œ ë° ìƒì„±.
 `./buildDockerImage.sh -v 19.3.0 -e`
 
 ## Run compose (detached)
@@ -111,7 +111,7 @@ cp LINUX.X64_193000_db_home.zip $DG_DIR/$DB_VERSION
 `docker-compose logs -f`
 
 
-¾Æ·¡´Â ¿øº» README (https://github.com/oraclesean/DataGuard-docker)
+ì•„ë˜ëŠ” ì›ë³¸ README (https://github.com/oraclesean/DataGuard-docker)
 ----------------------------------
 
 # docker-dataguard
